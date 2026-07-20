@@ -9,10 +9,13 @@ export const createCourse = z.object({
 export const responseCourse = z.object({
   id: z.uuid(),
   title: z.string().min(3).max(255),
-  category: z.string().min(3).max(255).optional(),
-  description: z.string().min(3).max(255).optional(),
+  category: z.string().min(3).max(255),
+  description: z.string().min(3).max(255),
   createdAt: z.coerce.date(),
 });
 
+export type courseCursor = { id: string; category?: string };
+
 export type CreateCourseBody = z.infer<typeof createCourse>;
 export type ResponseCourseBody = z.infer<typeof responseCourse>;
+export const ResponseCourseList = z.array(responseCourse);

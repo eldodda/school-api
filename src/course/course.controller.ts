@@ -1,20 +1,33 @@
-import type { Request, Response } from "express";
-import { createCourse } from "./course.schema";
+import type { NextFunction, Request, Response } from "express";
 import { CourseService } from "./course.service";
 
 export default class CourseController {
   constructor(private readonly courseService: CourseService) {}
-  async create(req: Request, res: Response) {
-    const parseResult = createCourse.safeParse(req.body);
 
-    if (!parseResult.success) {
-      return res.status(400).json({
-        message: "Invalid course data.",
-        errors: parseResult.error.format,
-      });
+  async createCourse(req: Request, res: Response, next: NextFunction) {
+    try {
+      const data = req.body;
+      const courseCreated = await this.courseService.create(data);
+      return res.status(201).json(courseCreated);
+    } catch (err) {
+      next(err);
     }
-    const validatedData = await parseResult.data;
-    const courseCreated = await this.courseService.create(validatedData);
-    return res.status(201).json(courseCreated);
+  }
+
+  async listCourses(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { cursorId, cursorCategory } = req.query;
+      const cursor = cursorId
+        ? {
+            id: String(cursorId),
+            category: cursorCategory ? String(cursorCategory) : undefined,
+          }
+        : undefined;
+
+      const result = await this.courseService.list(cursor);
+      return res.status(200).json(result);
+    } catch (err) {
+      next(err);
+    }
   }
 }

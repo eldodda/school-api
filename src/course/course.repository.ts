@@ -1,8 +1,33 @@
 import { prisma } from "../db/prisma";
-import type { CreateCourseBody, ResponseCourseBody } from "./course.schema";
+import type {
+  courseCursor,
+  CreateCourseBody,
+  ResponseCourseBody,
+} from "./course.schema";
 
 export class CourseRepository {
   async save(data: CreateCourseBody) {
     return await prisma.course.create({ data });
+  }
+
+  async list(cursor?: courseCursor) {
+    const pageSize = 3;
+    const list = await prisma.course.findMany({
+      take: pageSize,
+      ...(cursor && {
+        cursor: {
+          id: cursor.id,
+        },
+        skip: 1,
+      }),
+      orderBy: [{ category: "asc" }, { id: "asc" }],
+    });
+    const lastItem = list[list.length - 1];
+    const nextCursor =
+      list.length === pageSize
+        ? { id: lastItem.id, category: lastItem.category }
+        : null;
+
+    return { data: list, nextCursor };
   }
 }

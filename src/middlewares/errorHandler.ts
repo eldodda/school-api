@@ -22,8 +22,9 @@ export const errorHandler = (
     res.status(400).json({
       status: "validation_error",
       message: "Dados inválidos inseridos na requisição",
-      errors: zPretty(error),
+      errors: zPretty ? zPretty(error) : error.format,
     });
+    return;
   }
 
   console.error("*====ERROR====*", error);
