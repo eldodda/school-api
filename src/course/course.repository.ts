@@ -30,4 +30,11 @@ export class CourseRepository {
 
     return { data: list, nextCursor };
   }
+
+  async find(id: ResponseCourseBody["id"]) {
+    const foundCourse = await prisma.course.findUnique({
+      where: { id },
+    });
+    return foundCourse;
+  }
 }

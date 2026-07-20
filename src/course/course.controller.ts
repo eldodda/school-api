@@ -30,4 +30,14 @@ export default class CourseController {
       next(err);
     }
   }
+
+  async findCourse(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.params;
+      const foundCourse = await this.courseService.findById(String(id));
+      return res.status(200).json(foundCourse);
+    } catch (err) {
+      next(err);
+    }
+  }
 }

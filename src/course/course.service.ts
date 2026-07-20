@@ -1,8 +1,12 @@
+import type { ZodUUID } from "zod";
+import { AppError } from "../middlewares/AppError";
 import { CourseRepository } from "./course.repository";
 import {
   createCourse,
+  responseCourse,
   ResponseCourseList,
   type CreateCourseBody,
+  type ResponseCourseBody,
 } from "./course.schema";
 
 export class CourseService {
@@ -20,5 +24,13 @@ export class CourseService {
     const validatedData = ResponseCourseList.safeParse(data);
 
     return { data: validatedData, nextCursor };
+  }
+
+  async findById(id: string) {
+    if (!id) throw new AppError("É necessário um ID para buscar.", 400);
+    const found = await this.courseRepository.find(id);
+    const validated = responseCourse.safeParse(found);
+    if (!validated.success) throw validated.error;
+    return validated;
   }
 }

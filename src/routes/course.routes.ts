@@ -16,8 +16,11 @@ courseRoutes
   .post("/courses", (req: Request, res: Response, next: NextFunction) => {
     courseController.createCourse(req, res, next);
   })
-  .get("/courses", (req: Request, res: Response, next: NextFunction) =>
-    courseController.listCourses(req, res, next),
-  );
+  .get("/courses", (req: Request, res: Response, next: NextFunction) => {
+    courseController.listCourses(req, res, next);
+  })
+  .get("/courses/:id", (req: Request, res: Response, next: NextFunction) => {
+    courseController.findCourse(req, res, next);
+  });
 
 export default courseRoutes;
