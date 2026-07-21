@@ -13,10 +13,8 @@ export class CourseService {
   constructor(private readonly courseRepository: CourseRepository) {}
 
   async create(data: CreateCourseBody) {
-    const parsed = createCourse.safeParse(data);
-    if (!parsed.success) throw parsed.error;
-    const courseCreated = await this.courseRepository.save(parsed.data);
-    return courseCreated;
+    const parsed = createCourse.parse(data);
+    return await this.courseRepository.save(parsed);
   }
 
   async list(cursor?: { id: string; category?: string }) {
@@ -27,10 +25,23 @@ export class CourseService {
   }
 
   async findById(id: string) {
-    if (!id) throw new AppError("É necessário um ID para buscar.", 400);
     const found = await this.courseRepository.find(id);
-    const validated = responseCourse.safeParse(found);
-    if (!validated.success) throw validated.error;
-    return validated;
+    if (!found) throw new AppError("Curso não encontrado.", 404);
+
+    return responseCourse.parse(found);
+  }
+
+  async update(id: string, data: CreateCourseBody) {
+    const courseToUpdate = await this.courseRepository.update(id, data);
+    if (!courseToUpdate) throw new AppError("Curso não encontrado.", 404);
+
+    return responseCourse.parse(courseToUpdate);
+  }
+
+  async delete(id: string) {
+    const courseToDelete = await this.courseRepository.find(id);
+    if (!courseToDelete) throw new AppError("Curso não encontrado.", 404);
+
+    await this.courseRepository.delete(id);
   }
 }

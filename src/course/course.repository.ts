@@ -37,4 +37,18 @@ export class CourseRepository {
     });
     return foundCourse;
   }
+
+  async update(id: ResponseCourseBody["id"], data: CreateCourseBody) {
+    const updatedCourse = await prisma.course.update({
+      where: { id },
+      data,
+    });
+    return updatedCourse;
+  }
+
+  async delete(id: ResponseCourseBody["id"]) {
+    await prisma.course.delete({
+      where: { id },
+    });
+  }
 }

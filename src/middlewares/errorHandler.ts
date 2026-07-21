@@ -1,6 +1,8 @@
 import type { NextFunction, Request, Response } from "express";
 import { AppError } from "./AppError";
 import z, { ZodError } from "zod";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/client";
+import { notFoundHandler } from "./notFoundHandler";
 
 const zPretty = z.prettifyError;
 
@@ -20,11 +22,21 @@ export const errorHandler = (
 
   if (error instanceof ZodError) {
     res.status(400).json({
-      status: "validation_error",
+      status: "Bad_request",
       message: "Dados inválidos inseridos na requisição",
       errors: zPretty ? zPretty(error) : error.format,
     });
     return;
+  }
+
+  if (error instanceof PrismaClientKnownRequestError) {
+    if (error.code === "P2025") {
+      res.status(404).json({
+        status: "Not_found",
+        message: "Registro obrigatório não encontrado.",
+      });
+      return;
+    }
   }
 
   console.error("*====ERROR====*", error);

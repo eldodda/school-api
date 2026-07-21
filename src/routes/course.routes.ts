@@ -21,6 +21,12 @@ courseRoutes
   })
   .get("/courses/:id", (req: Request, res: Response, next: NextFunction) => {
     courseController.findCourse(req, res, next);
+  })
+  .put("/courses/:id", (req: Request, res: Response, next: NextFunction) => {
+    courseController.updateCourse(req, res, next);
+  })
+  .delete("/courses/:id", (req: Request, res: Response, next: NextFunction) => {
+    courseController.deleteCourse(req, res, next);
   });
 
 export default courseRoutes;
