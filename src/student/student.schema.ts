@@ -1,0 +1,19 @@
+import z, { email } from "zod";
+
+export const CreateStudent = z.object({
+  name: z.string().min(3).max(255),
+  email: z.string().min(5).max(255),
+});
+
+export const ResponseStudent = z.object({
+  id: z.uuid(),
+  name: z.string().min(3).max(255),
+  email: z.email(),
+  createdAt: z.coerce.date(),
+});
+
+export type studentCursor = { id: string; name?: string };
+
+export type CreateStudentBody = z.infer<typeof CreateStudent>;
+export type ResponseStudentBody = z.infer<typeof ResponseStudent>;
+export const ResponseStudentList = z.array(ResponseStudent);

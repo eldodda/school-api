@@ -2,7 +2,6 @@ import type { NextFunction, Request, Response } from "express";
 import { AppError } from "./AppError";
 import z, { ZodError } from "zod";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/client";
-import { notFoundHandler } from "./notFoundHandler";
 
 const zPretty = z.prettifyError;
 
@@ -14,7 +13,7 @@ export const errorHandler = (
 ): void => {
   if (error instanceof AppError) {
     res.status(error.statusCode).json({
-      status: "error",
+      status: "erro",
       message: error.message,
     });
     return;
@@ -22,7 +21,7 @@ export const errorHandler = (
 
   if (error instanceof ZodError) {
     res.status(422).json({
-      status: "Unprocessable_entity",
+      status: "dados_invalidos",
       message: "Dados inválidos enviados na requisição",
       errors: zPretty ? zPretty(error) : error.format,
     });
@@ -32,17 +31,28 @@ export const errorHandler = (
   if (error instanceof PrismaClientKnownRequestError) {
     if (error.code === "P2025") {
       res.status(404).json({
-        status: "Not_found",
-        message: "Registro obrigatório não encontrado.",
+        status: "nao_encontrado",
+        message: "Registro não encontrado.",
       });
       return;
+    } else if (error.code === "P2002") {
+      res.status(409).json({
+        status: "conflito",
+        message:
+          "Já existe um registro com a chave única enviada na requisição.",
+      });
+    } else {
+      res.status(400).json({
+        status: "solicitacao_invalida",
+        message: "Erro na operação com o banco de dados.",
+      });
     }
   }
 
   console.error("*====ERROR====*", error);
 
   res.status(500).json({
-    status: error,
-    message: "Internal server error.",
+    status: "erro",
+    message: "Erro interno do servidor.",
   });
 };
