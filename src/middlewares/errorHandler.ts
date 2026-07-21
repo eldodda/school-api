@@ -21,9 +21,9 @@ export const errorHandler = (
   }
 
   if (error instanceof ZodError) {
-    res.status(400).json({
-      status: "Bad_request",
-      message: "Dados inválidos inseridos na requisição",
+    res.status(422).json({
+      status: "Unprocessable_entity",
+      message: "Dados inválidos enviados na requisição",
       errors: zPretty ? zPretty(error) : error.format,
     });
     return;
