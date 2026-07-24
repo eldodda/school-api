@@ -3,7 +3,9 @@ import "express-async-errors";
 import "reflect-metadata";
 import "dotenv/config";
 import express, { type Express, type Request, type Response } from "express";
+import swaggerUi from "swagger-ui-express";
 import router from "./routes/index";
+import { generateSwaggerDocument } from "./config/swagger";
 import { notFoundHandler } from "./middlewares/notFoundHandler";
 import { errorHandler } from "./middlewares/errorHandler";
 
@@ -19,6 +21,7 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/", router);
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(generateSwaggerDocument()));
 app.use(notFoundHandler);
 app.use(errorHandler);
 
