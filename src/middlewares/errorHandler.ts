@@ -1,9 +1,4 @@
-import type {
-  ErrorRequestHandler,
-  NextFunction,
-  Request,
-  Response,
-} from "express";
+import type { ErrorRequestHandler, Request, Response } from "express";
 import { AppError } from "./AppError";
 import z, { ZodError } from "zod";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/client";
@@ -14,7 +9,6 @@ export const errorHandler: ErrorRequestHandler = (
   error: Error,
   req: Request,
   res: Response,
-  next: NextFunction,
 ) => {
   console.error("<======ERRO======>", error);
 

@@ -1,8 +1,7 @@
 import cors from "cors";
 import "express-async-errors";
-import "reflect-metadata";
 import "dotenv/config";
-import express, { type Express, type Request, type Response } from "express";
+import express, { type Express } from "express";
 import swaggerUi from "swagger-ui-express";
 import router from "./routes/index";
 import { generateSwaggerDocument } from "./config/swagger";

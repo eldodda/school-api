@@ -1,4 +1,3 @@
-import type { ZodUUID } from "zod";
 import { AppError } from "../middlewares/AppError";
 import { CourseRepository } from "./course.repository";
 import {
@@ -6,7 +5,6 @@ import {
   responseCourse,
   ResponseCourseList,
   type CreateCourseBody,
-  type ResponseCourseBody,
 } from "./course.schema";
 
 export class CourseService {

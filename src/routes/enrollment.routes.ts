@@ -7,7 +7,6 @@ import {
 import { EnrollmentController } from "../enrollment/enrollment.controller";
 import { EnrollmentRepository } from "../enrollment/enrollment.repository";
 import { EnrollmentService } from "../enrollment/enrollment.service";
-import { en } from "zod/locales";
 
 export const enrollRouter = Router();
 

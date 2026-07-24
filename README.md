@@ -28,6 +28,32 @@ http://localhost:3000
 http://localhost:3000/docs
 ```
 
+## Ou via docker-compose
+
+1. Inicie o serviço com Docker Compose:
+
+```bash
+docker compose up --build
+```
+
+2. A API estará disponível em:
+
+```text
+http://localhost:3000
+```
+
+3. Para rodar em segundo plano:
+
+```bash
+docker compose up -d --build
+```
+
+4. Para parar e remover os containers:
+
+```bash
+docker compose down
+```
+
 > A aplicação usa `express`, `Prisma`, SQLite e `zod` para validação.
 
 ## Estrutura do projeto

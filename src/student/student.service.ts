@@ -5,7 +5,6 @@ import {
   ResponseStudent,
   ResponseStudentList,
   type CreateStudentBody,
-  type ResponseStudentBody,
 } from "./student.schema";
 
 export class StudentService {
