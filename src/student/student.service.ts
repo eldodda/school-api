@@ -18,7 +18,7 @@ export class StudentService {
 
   async list(cursor?: { id: string; category?: string }) {
     const { data, nextCursor } = await this.studentRepository.list(cursor);
-    const validatedData = ResponseStudentList.safeParse(data);
+    const validatedData = ResponseStudentList.parse(data);
 
     return { data: validatedData, nextCursor };
   }

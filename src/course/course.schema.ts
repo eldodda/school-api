@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { ResponseEnrollment } from "../enrollment/enrollment.schema";
 
 export const createCourse = z.object({
   title: z.string().min(3).max(255),
@@ -11,6 +12,7 @@ export const responseCourse = z.object({
   title: z.string().min(3).max(255),
   category: z.string().min(3).max(255),
   description: z.string().min(3).max(255),
+  enrollments: z.array(ResponseEnrollment).optional(),
   createdAt: z.coerce.date(),
 });
 

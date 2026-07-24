@@ -35,7 +35,6 @@ export default class CourseController {
   async findCourse(req: Request, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
-      if (!id) throw new AppError("É necessário um ID para buscar.", 400);
       const foundCourse = await this.courseService.findById(String(id));
       return res.status(200).json(foundCourse);
     } catch (err) {
@@ -71,7 +70,7 @@ export default class CourseController {
     try {
       const { id } = req.params;
       if (!id)
-        throw new AppError("É necessário um ID para excluir um registro.", 400);
+        throw new AppError("É necessário um ID para excluir um registro.", 404);
       await this.courseService.delete(String(id));
       return res.status(204).send();
     } catch (err) {

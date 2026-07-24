@@ -3,9 +3,9 @@ import express, {
   type Request,
   type Response,
 } from "express";
-import CourseController from "../course/course.controller.ts";
-import { CourseService } from "../course/course.service.ts";
-import { CourseRepository } from "../course/course.repository.ts";
+import CourseController from "../course/course.controller";
+import { CourseService } from "../course/course.service";
+import { CourseRepository } from "../course/course.repository";
 
 const courseRoutes = express.Router();
 const courseRepository = new CourseRepository();

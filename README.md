@@ -1,41 +1,89 @@
-# CATALOG API
+# Catalog API
 
-## Catálogo de cursos
+API REST simples para gerenciar cursos, estudantes e matrículas.
 
-Uma API RESTful com catálogo de cursos, alunos e matrículas.
+## Como rodar
 
-Construído com:
+1. Instale as dependências:
 
-1. TypeScript;
-2. Prisma;
-3. SQLite;
+```bash
+npm install
+```
 
-O projeto é parte de um desafio na carreira de Node.JS para back-end da Alura.
+2. Inicie a aplicação em modo de desenvolvimento:
 
-#### Regras gerais
+```bash
+npm run dev
+```
 
-- A API deve ser RESTful e expor endpoints sob o prefixo /api.
-- Banco relacional recomendado (PostgreSQL / SQLite para facilidade).
-- Relacionamentos: N:N entre Student e Course por meio de Enrollment.
-- ORM: escolha um por projeto (ex.: Prisma no Express e TypeORM no Nest, para comparar).
+3. A API estará disponível em:
 
-#### Validações mínimas:
+```text
+http://localhost:3000
+```
 
-- **Course.title** ≥ 3 caracteres.
-- **Student.email** válido e único.
-- Não permitir matrícula duplicada do mesmo estudante no mesmo curso (conflito **409**).
-- **Erros padronizados**: corpo JSON com message, details (opcional) e **código HTTP coerente** (400, 404, 409, 422, 500).
-- **Documentação**: Swagger/OpenAPI (NestJS tem @nestjs/swagger; Express pode usar swagger-ui-express).
-- Modelo de domínio (comum às duas versões)
+> A aplicação usa `express`, `Prisma` e SQLite. O servidor só inicia automaticamente fora do modo de teste.
 
-#### Entidades obrigatórias
+## Rotas
 
-1. **Course**: id, title, category (opcional), description (opcional), createdAt
-2. **Student**: id, name, email (único), createdAt
-3. **Enrollment**: id, studentId, courseId, createdAt
+### Cursos
 
-- Restrição: (studentId, courseId) único
+- `POST /courses`
+  - Body: `{ title, category, description }`
+  - Retorna: `201` com o curso criado.
+- `GET /courses`
+  - Retorna: `200` com a lista de cursos.
+- `GET /courses/:id`
+  - Retorna: `200` com o curso encontrado.
+- `PUT /courses/:id`
+  - Body: `{ title, category, description }`
+  - Retorna: `200` com o curso atualizado.
+- `DELETE /courses/:id`
+  - Retorna: `204` quando o curso é removido.
 
-#### Relacionamentos
+### Estudantes
 
-**Student** 1—N **Enrollment** N—1 **Course** (equivale a N:N entre **Student** e **Course**).
+- `POST /students`
+  - Body: `{ name, email }`
+  - Retorna: `201` com o estudante criado.
+- `GET /students`
+  - Retorna: `200` com a lista de estudantes.
+- `GET /students/:id`
+  - Retorna: `200` com o estudante encontrado.
+- `PUT /students/:id`
+  - Body: `{ name, email }`
+  - Retorna: `200` com o estudante atualizado.
+- `DELETE /students/:id`
+  - Retorna: `204` quando o estudante é removido.
+
+### Matrículas
+
+- `POST /enrollments?courseId={courseId}&studentId={studentId}`
+  - Cria uma matrícula entre curso e estudante.
+  - Retorna: `201` com a matrícula criada.
+- `GET /students/:studentId/enrollments`
+  - Retorna: `200` com as matrículas do estudante.
+- `DELETE /enrollments/:id`
+  - Retorna: `204` quando a matrícula é removida.
+
+## Testes
+
+- Executa o banco de testes e os testes Jest:
+
+```bash
+npm test
+```
+
+- Executa com geração de cobertura:
+
+```bash
+npm run test:coverage
+```
+
+> Os scripts já aplicam `prisma db push` no banco de teste antes de rodar.
+
+## Observações
+
+- Validações de entrada usam `zod`.
+- Erros de banco retornam códigos HTTP adequados (404, 409, 422).
+- A rota de matrícula exige `courseId` e `studentId` como query params.

@@ -1,3 +1,4 @@
+import { includes } from "zod";
 import { prisma } from "../db/prisma";
 import type {
   studentCursor,
@@ -33,6 +34,7 @@ export class StudentRepository {
 
   async find(id: ResponseStudentBody["id"]) {
     const foundStudent = await prisma.student.findUnique({
+      include: { enrollments: true },
       where: { id },
     });
     return foundStudent;

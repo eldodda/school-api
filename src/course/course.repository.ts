@@ -33,6 +33,7 @@ export class CourseRepository {
 
   async find(id: ResponseCourseBody["id"]) {
     const foundCourse = await prisma.course.findUnique({
+      include: { enrollments: true },
       where: { id },
     });
     return foundCourse;
